@@ -16,7 +16,7 @@ import { INTRO_DECLARATIONS } from './intro';
 import { routes } from './routes';
 import { client } from './client';
 // GraphQL
-import { GRAPHQL_DECLARATIONS } from './graphql';
+import { graphqlDeclarations } from './graphql';
 // Single
 import { SINGLE_PROVIDERS, SINGLE_DECLARATIONS } from './single';
 // Multiple
@@ -31,7 +31,7 @@ import { ProfileComponent } from './profile/profile.component';
   declarations: [
     AppComponent,
     // GraphQL
-    ...GRAPHQL_DECLARATIONS,
+    ...graphqlDeclarations('decorator'),
     // Single
     ...SINGLE_DECLARATIONS,
     // Multiple

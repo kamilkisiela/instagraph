@@ -30,7 +30,6 @@ export class PhotoComponent {
   @Output() onLike: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   like() {
-    this.photo.liked = !this.photo.liked;
-    this.onLike.emit(this.photo.liked);
+    this.onLike.emit(!this.photo.liked);
   }
 }

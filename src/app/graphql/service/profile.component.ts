@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Angular2Apollo } from 'angular2-apollo';
 import { Subscription } from 'rxjs/Subscription';
 
-import { User } from '../shared/user.interface';
+import { User } from '../../shared/user.interface';
 
 import gql from 'graphql-tag';
 

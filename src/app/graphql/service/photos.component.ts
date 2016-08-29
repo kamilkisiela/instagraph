@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Angular2Apollo } from 'angular2-apollo';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Photo } from '../shared/photo.interface';
-import { PhotoLikeEvent } from '../photos/photos.component';
+import { Photo } from '../../shared/photo.interface';
+import { PhotoLikeEvent } from '../../photos/photos.component';
 
 import gql from 'graphql-tag';
 
@@ -14,6 +14,7 @@ const FeedQuery = gql`
       url
       createdAt
       likes
+      liked
     }
   }
 `;
@@ -54,15 +55,23 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
         id: event.id,
         value: event.value,
       },
-    }).then(({data}) => {
-      if (data) {
-        this.photos.forEach(item => {
-          if (item.id === event.id) {
-            item.likes = data.likePhoto.likes;
-            item.liked = data.likePhoto.liked;
-          }
-        });
-      }
+      updateQueries: {
+        getFeed: (previousQueryResult, { mutationResult }) => {
+          const currentFeed = previousQueryResult.feed;
+          const newFeed = currentFeed.map(photo => {
+            if (photo.id === event.id) {
+              photo.likes = mutationResult.data.likePhoto.likes;
+              photo.liked = mutationResult.data.likePhoto.liked;
+            }
+
+            return photo;
+          });
+
+          return {
+            feed: newFeed,
+          };
+        },
+      },
     });
   }
 

@@ -1,3 +1,34 @@
-<h1>
-  {{title}}
-</h1>
+<md-toolbar color="primary">
+  <md-icon>monochrome_photos</md-icon>
+  <a routerLink="/" class="home">InstaGraph</a>
+
+  <span class="fill-remaining-space"></span>
+
+  <button md-icon-button
+    routerLink="/multiple" routerLinkActive="active"
+    class="data-source">
+    <md-icon md-tooltip="Multiple endpoints" tooltip-position="below">
+      call_split
+    </md-icon>
+  </button>
+
+  <button md-icon-button
+    routerLink="/single" routerLinkActive="active" 
+    class="data-source"> 
+    <md-icon md-tooltip="All in one endpoint" tooltip-position="below">
+      call_merge
+    </md-icon>
+  </button>
+  
+  <button md-icon-button 
+    routerLink="/graphql" routerLinkActive="active"
+    class="data-source">
+    <md-icon md-tooltip="GraphQL" tooltip-position="below">
+      timeline
+    </md-icon>
+  </button>
+</md-toolbar>
+
+<main>
+  <router-outlet></router-outlet>
+</main>

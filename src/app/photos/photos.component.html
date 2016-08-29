@@ -1,0 +1,8 @@
+<md-grid-list cols="3" rowHeight="350px" gutterSize="30px">
+  <md-grid-tile *ngFor="let photo of photos">
+    <app-photo [photoId]="photo"></app-photo>
+  </md-grid-tile>
+</md-grid-list>
+<div class="load-more">
+  <button md-raised-button color="primary">load more</button>
+</div>

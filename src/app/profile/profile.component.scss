@@ -1,0 +1,51 @@
+#profile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+#profile > div {
+  flex: 0 1 auto;
+}
+
+div.photo {
+  width: 33%;
+  text-align: center;
+}
+
+div.photo > img {
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+}
+
+div.info {
+  width: 66%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+div.info > h1 {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+div.info > ul {
+  display: flex;
+  padding: 0;
+  margin: 25px 0 0 0;
+  flex-direction: row;
+  list-style: none;
+}
+
+div.info > ul > li {
+  margin-right: 40px; 
+}
+
+div.info > ul > li:last-child {
+  margin-right: 0;
+}
+
+div.info .number {
+  font-weight: bold;
+}

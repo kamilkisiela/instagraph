@@ -1,0 +1,31 @@
+md-toolbar.md-primary {
+  background: #fff;
+  border-bottom: 1px solid #dbdbdb;
+  color: #333;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+a.home {
+  margin-left: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+a.home:hover {
+  color: #009688;
+}
+
+.data-source {
+  margin-left: 15px;
+}
+
+.data-source.active {
+  color: #009688;
+}
+
+main {
+  padding: 25px;
+}

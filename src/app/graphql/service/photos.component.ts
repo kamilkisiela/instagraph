@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Angular2Apollo } from 'angular2-apollo';
+import { Angular2Apollo, ApolloQueryObservable } from 'angular2-apollo';
+import { ApolloQueryResult } from 'apollo-client';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Photo } from '../../shared/photo.interface';
@@ -8,8 +9,8 @@ import { PhotoLikeEvent } from '../../photos/photos.component';
 import gql from 'graphql-tag';
 
 const FeedQuery = gql`
-  query getFeed {
-    feed {
+  query getFeed($offset: Int!, $limit: Int!) {
+    feed(offset: $offset, limit: $limit) {
       id
       url
       createdAt
@@ -31,11 +32,14 @@ const LikeMutation = gql`
 @Component({
   selector: 'app-graphql-photos',
   template: `
-    <app-photos [photos]="photos" (onPhotoLike)="onLike($event)"></app-photos>
+    <app-photos [photos]="photos" (onPhotoLike)="onLike($event)" (onMore)="onMore()"></app-photos>
   `
 })
 export class GraphqlPhotosComponent implements OnInit, OnDestroy {
   photos: Photo[];
+  offset: number = 0;
+  limit: number = 3;
+  feedObs: ApolloQueryObservable<ApolloQueryResult>;
   feedSub: Subscription;
 
   constructor(
@@ -43,7 +47,15 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.feedSub = this.apollo.watchQuery({ query: FeedQuery}).subscribe(({data}) => {
+    this.feedObs = this.apollo.watchQuery({
+      query: FeedQuery,
+      variables: {
+        offset: this.offset,
+        limit: this.limit,
+      },
+    });
+
+    this.feedSub = this.feedObs.subscribe(({data}) => {
       this.photos = data.feed;
     });
   }
@@ -71,6 +83,25 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
             feed: newFeed,
           };
         },
+      },
+    });
+  }
+
+  onMore() {
+    this.offset += this.limit;
+    this.feedObs.fetchMore({
+      variables: {
+        offset: this.offset,
+        limit: this.limit,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult.data) {
+          return prev;
+        }
+
+        return Object.assign({}, prev, {
+          feed: [...prev.feed, ...fetchMoreResult.data.feed],
+        });
       },
     });
   }

@@ -31,7 +31,7 @@ import { ProfileComponent } from './profile/profile.component';
   declarations: [
     AppComponent,
     // GraphQL
-    ...graphqlDeclarations('decorator'),
+    ...graphqlDeclarations('service'),
     // Single
     ...SINGLE_DECLARATIONS,
     // Multiple

@@ -45,7 +45,7 @@ export const schema = [`
 export const resolvers = {
   Query: {
     feed(_, { type, offset, limit }, context) {
-      const protectedLimit = (limit < 1 || limit > 3) ? 3 : limit;
+      const protectedLimit = limit < 1 ? 3 : limit;
 
       return context.photos.feed(offset, protectedLimit);
     },

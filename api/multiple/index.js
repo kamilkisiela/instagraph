@@ -26,7 +26,6 @@ export function multiple(app) {
     const limit = parseInt(req.params.limit);
     
     const results = photos.feed(offset, limit).map(photo => {
-      console.log('photo');
       // add author instead of just an id
       photo.author = me;
       return photo;

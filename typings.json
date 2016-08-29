@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "graphql": "registry:npm/graphql#0.5.0+20160602041655"
+  },
+  "globalDependencies": {
+    "hammerjs": "registry:dt/hammerjs#2.0.8+20160724063812"
   }
 }

@@ -40,7 +40,10 @@ export class SingleAPIService implements APIService {
   public feed(offset?: number, limit?: number): Observable<Photo[]> {
     let url = 'feed';
 
-    if (offset && limit) {
+    if (limit) {
+      if (!offset) {
+        offset = 0;
+      }
       url += `/${offset}-${limit}`;
     }
 

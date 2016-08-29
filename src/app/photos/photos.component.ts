@@ -17,7 +17,7 @@ export interface PhotoLikeEvent {
     </md-grid-list>
 
     <div class="load-more" *ngIf="photos">
-      <button md-raised-button color="primary">load more</button>
+      <button md-raised-button color="primary" (click)="more()" [disableRipple]="true">load more</button>
     </div>
   `,
   styleUrls: ['photos.component.scss']
@@ -25,11 +25,16 @@ export interface PhotoLikeEvent {
 export class PhotosComponent {
   @Input() photos: Photo[];
   @Output() onPhotoLike: EventEmitter<PhotoLikeEvent> = new EventEmitter<PhotoLikeEvent>();
+  @Output() onMore: EventEmitter<void> = new EventEmitter<void>();
 
   onLike(value: boolean, id: number) {
     this.onPhotoLike.emit({
       id,
       value,
     });
+  }
+
+  more() {
+    this.onMore.emit();
   }
 }

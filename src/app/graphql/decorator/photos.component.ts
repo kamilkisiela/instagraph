@@ -13,8 +13,8 @@ interface QueryResult extends ApolloQuery {
 }
 
 const FeedQuery = gql`
-  query getFeed {
-    feed {
+  query getFeed($offset: Int!, $limit: Int!) {
+    feed(offset: $offset, limit: $limit) {
       id
       url
       createdAt
@@ -36,14 +36,18 @@ const LikeMutation = gql`
 @Component({
   selector: 'app-graphql-photos',
   template: `
-    <app-photos [photos]="data.feed" (onPhotoLike)="onLike($event)"></app-photos>
+    <app-photos [photos]="data.feed" (onPhotoLike)="onLike($event)" (onMore)="onMore()"></app-photos>
   `
 })
 @Apollo({
   client,
-  queries: () => ({
+  queries: (component: GraphqlPhotosComponent) => ({
     data: {
       query: FeedQuery,
+      variables: {
+        offset: component.offset,
+        limit: component.limit,
+      },
     },
   }),
   mutations: () => ({
@@ -74,10 +78,37 @@ const LikeMutation = gql`
   }),
 })
 export class GraphqlPhotosComponent {
+  offset: number = 0;
+  limit: number = 3;
   data: QueryResult;
   likePhoto: (id: number, value: boolean) => Promise<ApolloQueryResult>;
 
   onLike(event: PhotoLikeEvent) {
     this.likePhoto(event.id, event.value);
+  }
+
+  onMore() {
+    // XXX Temporary fix of `apollostack/angular2-apollo/issues/80`
+    // XXX WE HAVE A BUG HERE!!!!
+    /*
+      this.offset += this.limit;
+      this.data['fetchMore']({
+      variables: {
+        offset: this.offset,
+        limit: this.limit,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult.data) {
+          return prev;
+        }
+
+        return Object.assign({}, prev, {
+          feed: [...prev.feed, ...fetchMoreResult.data.feed],
+        });
+      },
+    });*/
+
+    // XXX Temporary workaround
+    this.limit += 3;
   }
 }

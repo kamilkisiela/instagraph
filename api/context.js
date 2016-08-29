@@ -34,7 +34,7 @@ class Photos {
   }
 
   feed(offset, limit) {
-    if (!offset && !limit) {
+    if (typeof offset === 'undefined' && !limit) {
       return this.data;
     }
 

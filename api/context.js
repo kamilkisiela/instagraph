@@ -61,21 +61,18 @@ class Photo {
     this.id = id;
     this.author = 1;
     this.url = `assets/${id}.jpg`;
-    this.randomizeCreatedAt();
-    this.randomizeLikes();
-  }
-
-  randomizeLikes() {
     this.likes = this.randomInt(20, 100);
+    this.createdAt = this.randomDate();
+    this.liked = false;
   }
 
-  randomizeCreatedAt() {
+  randomDate() {
     const days = 7;
     const date = new Date();
     
     date.setDate(date.getDate() + this.randomInt(days, days * 2));
 
-    this.createdAt = date;
+    return date;
   }
 
   randomInt(min, max) {

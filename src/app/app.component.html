@@ -6,18 +6,21 @@
 
   <button md-icon-button
     routerLink="/multiple" routerLinkActive="active"
+    [disableRipple]="true"
     class="data-source">
     <md-icon>call_split</md-icon>
   </button>
 
   <button md-icon-button
-    routerLink="/single" routerLinkActive="active" 
+    routerLink="/single" routerLinkActive="active"
+    [disableRipple]="true" 
     class="data-source"> 
     <md-icon>call_merge</md-icon>
   </button>
   
   <button md-icon-button 
     routerLink="/graphql" routerLinkActive="active"
+    [disableRipple]="true"
     class="data-source">
     <md-icon>timeline</md-icon>
   </button>

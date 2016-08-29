@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { APIService } from '../shared/api.interface';
@@ -9,6 +9,7 @@ import { User } from '../shared/user.interface';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/forkJoin';
 
 interface PhotoLink {
@@ -29,6 +30,13 @@ export class SingleAPIService implements APIService {
     private http: Http
   ) {}
 
+  public like(id: number, value: boolean): Promise<Photo> {
+    return this.post('photo/like', {
+      id,
+      value,
+    }).toPromise();
+  }
+
   public feed(offset?: number, limit?: number): Observable<Photo[]> {
     let url = 'feed';
 
@@ -43,14 +51,18 @@ export class SingleAPIService implements APIService {
     return this.get('photo/' + id);
   }
 
-  private photoLinks(photos: Observable<PhotoLink[]>): Observable<Photo[]> {
-    return photos.mergeMap(results => {
-      const reqs = results.map(photo => {
-        return this.get(photo.link);
-        // TODO get also the author
+  private photoLinks(photosObs: Observable<PhotoLink[]>): Observable<Photo[]> {
+    return photosObs.mergeMap((photos: PhotoLink[]) => {
+      const photoReqs = photos.map((photoLink: PhotoLink) => {
+        return this.get(photoLink.link)
+          .mergeMap(photo => this.get(photo.author.link), (photo, author) => {
+            photo.author = author;
+            return photo;
+          });
       });
 
-      return Observable.forkJoin(reqs);
+      // TODO get also the author
+      return Observable.forkJoin(photoReqs);
     }) as Observable<Photo[]>;
   }
 
@@ -67,7 +79,19 @@ export class SingleAPIService implements APIService {
   }
 
   private get(url: string): Observable<any> {
-    return this.http.get(SingleAPIService.baseUrl + url)
+    return this.http.get(this.absoluteUrl(url))
       .map(result => result.json());
+  }
+
+  private post(url: string, body: Object): Observable<any> {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers });
+
+    return this.http.post(this.absoluteUrl(url), JSON.stringify(body), options)
+      .map(result => result.json());
+  }
+
+  private absoluteUrl(url: string) {
+    return SingleAPIService.baseUrl + url;
   }
 }

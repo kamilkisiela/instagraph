@@ -48,5 +48,21 @@ export function single(app) {
     res.send(result);
   });
 
+  // like
+
+  router.post('/photo/like', (req, res) => {
+    const { id, value } = req.body;
+
+    const photo = photos.single(id);
+
+    if (photo) {
+      photo.likes += (value ? 1 : -1) * 1;
+      photo.liked = !!value;
+      photo.author = me.toLink();
+    }
+
+    res.send(photo);
+  });
+
   app.use('/single', router);
 }

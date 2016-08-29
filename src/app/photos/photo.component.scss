@@ -2,3 +2,30 @@ md-card > img {
   width: 100%;
   height: 100%;
 }
+
+md-card-content > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+md-card-content > div > span {
+  display: flex;
+  align-items: center;
+}
+
+button.like-button {
+  color: #555;
+}
+
+button.like-button:hover {
+  color: #333;
+}
+
+button.like-button.liked {
+  color: #009688
+}
+
+.likes {
+  color: #777;
+  font-style: italic;
+}

@@ -8,4 +8,5 @@ export interface APIService {
   photo(id: number): Observable<Photo>;
   me(): Observable<User>;
   user(id: number): Observable<User>;
+  like(id: number, value: boolean): Promise<Photo>;
 }

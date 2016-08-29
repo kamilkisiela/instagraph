@@ -16,6 +16,7 @@ export const schema = [`
     createdAt: Float!
     author: User!
     likes: Int!
+    liked: Boolean!
     ## relative url of a photo
     url: String!
   }
@@ -30,8 +31,14 @@ export const schema = [`
     ## Currently logged in user
     me: User
   }
+
+  type Mutation {
+    likePhoto(id: Int!, value: Boolean!): Photo
+  }
+
   schema {
     query: Query
+    mutation: Mutation
   }
 `];
 
@@ -47,6 +54,18 @@ export const resolvers = {
     },
     me(_, __, context) {
       return context.me;
+    },
+  },
+  Mutation: {
+    likePhoto(_, { id, value }, context) {
+      const photo = context.photos.single(id);
+      
+      if (photo) {
+        photo.likes += (value ? 1 : -1) * 1;
+        photo.liked = !!value;
+      }
+
+      return photo;
     },
   },
   Photo: {

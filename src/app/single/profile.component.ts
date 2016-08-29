@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { SingleAPIService } from './single-api.service';
 import { User } from '../shared/user.interface';
@@ -9,16 +10,21 @@ import { User } from '../shared/user.interface';
     <app-profile [me]="me"></app-profile>
   `
 })
-export class SingleProfileComponent implements OnInit {
+export class SingleProfileComponent implements OnInit, OnDestroy {
   me: User;
+  meSub: Subscription;
 
   constructor(
     private api: SingleAPIService
   ) { }
 
   ngOnInit() {
-    this.api.me().subscribe(me => {
+    this.meSub = this.api.me().subscribe(me => {
       this.me = me;
     });
+  }
+
+  ngOnDestroy() {
+    this.meSub.unsubscribe();
   }
 }

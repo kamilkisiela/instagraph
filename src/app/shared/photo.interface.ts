@@ -6,4 +6,5 @@ export interface Photo {
   url: string;
   createdAt: number;
   likes: number;
+  liked: boolean;
 }

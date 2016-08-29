@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule }from '@angular/router';
@@ -12,7 +12,7 @@ import { MdIconModule } from '@angular2-material/icon';
 import { ApolloModule } from 'angular2-apollo';
 
 import { AppComponent } from './app.component';
-import { IntroComponent } from './intro/intro.component';
+import { INTRO_DECLARATIONS } from './intro';
 import { routes } from './routes';
 import { client } from './client';
 // GraphQL
@@ -22,6 +22,7 @@ import { SINGLE_PROVIDERS, SINGLE_DECLARATIONS } from './single';
 // Multiple
 import { MULTIPLE_PROVIDERS, MULTIPLE_DECLARATIONS } from './multiple';
 // Other
+import { NavigationComponent } from './navigation/navigation.component';
 import { PhotosComponent } from './photos/photos.component';
 import { PhotoComponent } from './photos/photo.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -29,7 +30,6 @@ import { ProfileComponent } from './profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
-    IntroComponent,
     // GraphQL
     ...GRAPHQL_DECLARATIONS,
     // Single
@@ -37,6 +37,8 @@ import { ProfileComponent } from './profile/profile.component';
     // Multiple
     ...MULTIPLE_DECLARATIONS,
     // Other
+    ...INTRO_DECLARATIONS,
+    NavigationComponent,
     PhotosComponent,
     ProfileComponent,
     PhotoComponent

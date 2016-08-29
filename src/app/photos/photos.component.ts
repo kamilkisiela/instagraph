@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { Photo } from '../shared/photo.interface';
 
 @Component({
   selector: 'app-photos',
-  templateUrl: 'photos.component.html',
+  template: `
+    <md-grid-list *ngIf="photos" cols="3" rowHeight="350px" gutterSize="30px">
+      <md-grid-tile *ngFor="let photo of photos">
+        <app-photo [photo]="photo"></app-photo>
+      </md-grid-tile>
+    </md-grid-list>
+
+    <div class="load-more" *ngIf="photos">
+      <button md-raised-button color="primary">load more</button>
+    </div>
+  `,
   styleUrls: ['photos.component.scss']
 })
-export class PhotosComponent implements OnInit {
-  photos: number[];
-
-  constructor() {
-    this.photos = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  }
-
-  ngOnInit() {
-  }
-
+export class PhotosComponent {
+  @Input() photos: Photo[];
 }

@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import { graphql } from './graphql';
 import { multiple } from './multiple';
@@ -8,6 +9,7 @@ import { single } from './single';
 const PORT = 4300;
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

@@ -70,7 +70,12 @@ class Photo {
   }
 
   randomizeCreatedAt() {
-    this.createdAt = new Date() + this.randomInt(2000, 20000);
+    const days = 7;
+    const date = new Date();
+    
+    date.setDate(date.getDate() + this.randomInt(days, days * 2));
+
+    this.createdAt = date;
   }
 
   randomInt(min, max) {

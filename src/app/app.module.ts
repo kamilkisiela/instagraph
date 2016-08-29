@@ -9,28 +9,35 @@ import { MdCardModule } from '@angular2-material/card';
 import { MdGridListModule } from '@angular2-material/grid-list';
 import { MdToolbarModule } from '@angular2-material/toolbar';
 import { MdIconModule } from '@angular2-material/icon';
-import { MdTooltipModule } from '@angular2-material/tooltip';
+import { ApolloModule } from 'angular2-apollo';
 
 import { AppComponent } from './app.component';
 import { IntroComponent } from './intro/intro.component';
 import { routes } from './routes';
-import { GraphqlComponent } from './graphql/graphql.component';
-import { SingleComponent } from './single/single.component';
-import { MultipleComponent } from './multiple/multiple.component';
+import { client } from './client';
+// GraphQL
+import { GRAPHQL_DECLARATIONS } from './graphql';
+// Single
+import { SINGLE_PROVIDERS, SINGLE_DECLARATIONS } from './single';
+// Multiple
+import { MULTIPLE_PROVIDERS, MULTIPLE_DECLARATIONS } from './multiple';
+// Other
 import { PhotosComponent } from './photos/photos.component';
 import { PhotoComponent } from './photos/photo.component';
-import { LoadingComponent } from './loading/loading.component';
 import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IntroComponent,
-    GraphqlComponent,
-    SingleComponent,
-    MultipleComponent,
+    // GraphQL
+    ...GRAPHQL_DECLARATIONS,
+    // Single
+    ...SINGLE_DECLARATIONS,
+    // Multiple
+    ...MULTIPLE_DECLARATIONS,
+    // Other
     PhotosComponent,
-    LoadingComponent,
     ProfileComponent,
     PhotoComponent
   ],
@@ -47,9 +54,13 @@ import { ProfileComponent } from './profile/profile.component';
     MdGridListModule,
     MdToolbarModule,
     MdIconModule,
-    MdTooltipModule
+    // GraphQL
+    ApolloModule.withClient(client),
   ],
-  providers: [],
+  providers: [
+    ...MULTIPLE_PROVIDERS,
+    ...SINGLE_PROVIDERS
+  ],
   entryComponents: [AppComponent],
   bootstrap: [AppComponent]
 })

@@ -1,13 +1,13 @@
-<div id="profile">
+<div id="profile" *ngIf="me">
   <div class="photo">
-    <img src="assets/profile.png"/>
+    <img [src]="me.picture"/>
   </div>
   <div class="info">
     <h1>
-      Foo Barbaz
+      {{me.firstname}} {{me.surname}}
     </h1>
     <p>
-      I use GraphQL, be like me. At least do the same haircut.
+      {{me.bio}}
     </p>
     <ul>
       <li>

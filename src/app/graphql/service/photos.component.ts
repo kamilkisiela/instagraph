@@ -4,7 +4,6 @@ import { ApolloQueryResult } from 'apollo-client';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Photo } from '../../shared/photo.interface';
-import { PhotoLikeEvent } from '../../photos/photos.component';
 
 import gql from 'graphql-tag';
 
@@ -12,19 +11,6 @@ const FeedQuery = gql`
   query getFeed($offset: Int!, $limit: Int!) {
     feed(offset: $offset, limit: $limit) {
       id
-      url
-      createdAt
-      likes
-      liked
-    }
-  }
-`;
-
-const LikeMutation = gql`
-  mutation like($id: Int!, $value: Boolean!) {
-    likePhoto(id: $id, value: $value) {
-      likes
-      liked
     }
   }
 `;
@@ -32,7 +18,13 @@ const LikeMutation = gql`
 @Component({
   selector: 'app-graphql-photos',
   template: `
-    <app-photos [photos]="photos" (onPhotoLike)="onLike($event)" (onMore)="onMore()"></app-photos>
+    <app-photos (onPhotoLike)="onLike($event)" (onMore)="onMore()">
+      <md-grid-list cols="3" rowHeight="390px" gutterSize="30px">
+        <md-grid-tile *ngFor="let photo of photos">
+          <app-graphql-photo [photoId]="photo.id"></app-graphql-photo>
+        </md-grid-tile>
+      </md-grid-list>
+    </app-photos>
   `
 })
 export class GraphqlPhotosComponent implements OnInit, OnDestroy {
@@ -57,33 +49,6 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
 
     this.feedSub = this.feedObs.subscribe(({data}) => {
       this.photos = data.feed;
-    });
-  }
-
-  onLike(event: PhotoLikeEvent) {
-    this.apollo.mutate({
-      mutation: LikeMutation,
-      variables: {
-        id: event.id,
-        value: event.value,
-      },
-      updateQueries: {
-        getFeed: (previousQueryResult, { mutationResult }) => {
-          const currentFeed = previousQueryResult.feed;
-          const newFeed = currentFeed.map(photo => {
-            if (photo.id === event.id) {
-              photo.likes = mutationResult.data.likePhoto.likes;
-              photo.liked = mutationResult.data.likePhoto.liked;
-            }
-
-            return photo;
-          });
-
-          return {
-            feed: newFeed,
-          };
-        },
-      },
     });
   }
 

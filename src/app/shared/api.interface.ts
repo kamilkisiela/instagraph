@@ -18,6 +18,5 @@ export interface APIPhotosComponent {
   limit: number;
   photos: Photo[];
   feedSub: Subscription;
-  onLike(event: PhotoLikeEvent): void;
   onMore(): void;
 }

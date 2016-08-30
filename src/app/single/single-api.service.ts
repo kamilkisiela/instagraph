@@ -47,26 +47,11 @@ export class SingleAPIService implements APIService {
       url += `/${offset}-${limit}`;
     }
 
-    return this.photoLinks(this.get(url));
+    return this.get(url);
   }
 
   public photo(id: number): Observable<Photo> {
     return this.get('photo/' + id);
-  }
-
-  private photoLinks(photosObs: Observable<PhotoLink[]>): Observable<Photo[]> {
-    return photosObs.mergeMap((photos: PhotoLink[]) => {
-      const photoReqs = photos.map((photoLink: PhotoLink) => {
-        return this.get(photoLink.link)
-          .mergeMap(photo => this.get(photo.author.link), (photo, author) => {
-            photo.author = author;
-            return photo;
-          });
-      });
-
-      // TODO get also the author
-      return Observable.forkJoin(photoReqs);
-    }) as Observable<Photo[]>;
   }
 
   public me(): Observable<User> {

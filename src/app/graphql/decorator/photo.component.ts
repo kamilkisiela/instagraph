@@ -7,11 +7,6 @@ import { Photo } from '../../shared/photo.interface';
 
 import gql from 'graphql-tag';
 
-export interface PhotoLikeEvent {
-  id: number;
-  value: boolean;
-}
-
 interface QueryResult extends ApolloQuery {
   photo: Photo;
 }

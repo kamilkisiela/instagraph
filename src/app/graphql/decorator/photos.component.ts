@@ -22,7 +22,7 @@ const FeedQuery = gql`
 @Component({
   selector: 'app-graphql-photos',
   template: `
-    <app-photos (onPhotoLike)="onLike($event)" (onMore)="onMore()">
+    <app-photos (onMore)="onMore()">
       <md-grid-list *ngIf="data.feed" cols="3" rowHeight="390px" gutterSize="30px">
         <md-grid-tile *ngFor="let photo of data.feed">
           <app-graphql-photo [photoId]="photo.id"></app-graphql-photo>

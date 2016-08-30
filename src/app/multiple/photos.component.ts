@@ -9,7 +9,13 @@ import { PhotoLikeEvent } from '../photos/photos.component';
 @Component({
   selector: 'app-multiple-photos',
   template: `
-    <app-photos [photos]="photos" (onPhotoLike)="onLike($event)" (onMore)="onMore()"></app-photos>
+    <app-photos (onMore)="onMore()">
+      <md-grid-list cols="3" rowHeight="390px" gutterSize="30px">
+        <md-grid-tile *ngFor="let photo of photos">
+          <app-multiple-photo [photoId]="photo.id"></app-multiple-photo>
+        </md-grid-tile>
+      </md-grid-list>
+    </app-photos>
   `
 })
 export class MultiplePhotosComponent implements OnInit, OnDestroy, APIPhotosComponent {
@@ -28,22 +34,11 @@ export class MultiplePhotosComponent implements OnInit, OnDestroy, APIPhotosComp
     });
   }
 
-  onLike(event: PhotoLikeEvent) {
-    this.api.like(event.id, event.value).then(photo => {
-      if (photo) {
-        this.photos.forEach(item => {
-          if (item.id === photo.id) {
-            item.likes = photo.likes;
-            item.liked = photo.liked;
-          }
-        });
-      }
-    });
-  }
-
   onMore() {
     this.offset += this.limit;
-    this.api.feed(this.offset, this.limit).subscribe(photos => {
+
+    this.feedSub.unsubscribe();
+    this.feedSub = this.api.feed(this.offset, this.limit).subscribe(photos => {
       if (photos.length) {
         photos.forEach(photo => {
           this.photos.push(photo);

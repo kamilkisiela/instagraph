@@ -50,12 +50,12 @@ import { ProfileComponent } from './profile/profile.component';
     FormsModule,
     RouterModule.forRoot(routes),
     // @angular2-material
-    MdCoreModule,
-    MdButtonModule,
-    MdCardModule,
-    MdGridListModule,
-    MdToolbarModule,
-    MdIconModule,
+    MdCoreModule.forRoot(),
+    MdButtonModule.forRoot(),
+    MdCardModule.forRoot(),
+    MdGridListModule.forRoot(),
+    MdToolbarModule.forRoot(),
+    MdIconModule.forRoot(),
     // GraphQL
     ApolloModule.withClient(client),
   ],

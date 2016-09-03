@@ -12,7 +12,7 @@ export function multiple(app) {
   });
 
   router.get('/users/:userId', (req, res) => {
-    if (req.params.userId === 1) {
+    if (parseInt(req.params.userId) === 1) {
       res.send(me);
     } else {
       res.send({});

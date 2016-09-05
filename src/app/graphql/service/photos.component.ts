@@ -8,27 +8,6 @@ import { PhotoLikeEvent } from '../../photos/photos.component';
 
 import gql from 'graphql-tag';
 
-const FeedQuery = gql`
-  query getFeed($offset: Int!, $limit: Int!) {
-    feed(offset: $offset, limit: $limit) {
-      id
-      url
-      createdAt
-      likes
-      liked
-    }
-  }
-`;
-
-const LikeMutation = gql`
-  mutation like($id: Int!, $value: Boolean!) {
-    likePhoto(id: $id, value: $value) {
-      likes
-      liked
-    }
-  }
-`;
-
 @Component({
   selector: 'app-graphql-photos',
   template: `
@@ -47,26 +26,61 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+
+
+    /*
+      QUERY
+    */
     this.feedObs = this.apollo.watchQuery({
-      query: FeedQuery,
+      query: gql`
+        query getFeed($offset: Int!, $limit: Int!) {
+          feed(offset: $offset, limit: $limit) {
+            id
+            url
+            createdAt
+            likes
+            liked
+          }
+        }
+      `,
       variables: {
         offset: this.offset,
         limit: this.limit,
       },
     });
 
+
+
+
     this.feedSub = this.feedObs.subscribe(({data}) => {
       this.photos = data.feed;
     });
   }
 
+
+
+
   onLike(event: PhotoLikeEvent) {
+    /*
+      MUTATION
+    */
     this.apollo.mutate({
-      mutation: LikeMutation,
+      mutation: gql`
+        mutation like($id: Int!, $value: Boolean!) {
+          likePhoto(id: $id, value: $value) {
+            likes
+            liked
+          }
+        }
+      `,
       variables: {
         id: event.id,
         value: event.value,
       },
+
+
+
+
       updateQueries: {
         getFeed: (previousQueryResult, { mutationResult }) => {
           const currentFeed = previousQueryResult.feed;
@@ -84,7 +98,10 @@ export class GraphqlPhotosComponent implements OnInit, OnDestroy {
           };
         },
       },
-    });
+    })
+      .then(result => {
+        console.log('Liked photo', result.data.likePhoto);
+      });
   }
 
   onMore() {

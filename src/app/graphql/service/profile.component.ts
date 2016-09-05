@@ -6,17 +6,6 @@ import { User } from '../../shared/user.interface';
 
 import gql from 'graphql-tag';
 
-const MeQuery = gql`
-  query getMe {
-    me {
-      picture
-      firstname
-      surname
-      bio
-    }
-  }
-`;
-
 @Component({
   selector: 'app-graphql-profile',
   template: `
@@ -31,11 +20,31 @@ export class GraphqlProfileComponent implements OnInit, OnDestroy {
     private apollo: Angular2Apollo
   ) { }
 
+
+
+
   ngOnInit() {
-    this.meSub = this.apollo.watchQuery({ query: MeQuery}).subscribe(({data}) => {
+    /*
+      QUERY
+    */
+
+    this.meSub = this.apollo.watchQuery({
+      query: gql`
+        query getMe {
+          me {
+            picture
+            firstname
+            surname
+            bio
+          }
+        }
+      `,
+    }).subscribe(({data}) => {
       this.me = data.me;
     });
   }
+
+  
 
   ngOnDestroy() {
     this.meSub.unsubscribe();

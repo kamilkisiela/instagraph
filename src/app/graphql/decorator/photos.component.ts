@@ -37,7 +37,7 @@ const FeedQuery = gql`
     data: {
       query: FeedQuery,
       variables: {
-        offset: component.offset,
+        offset: 0,
         limit: component.limit,
       },
     },
@@ -49,11 +49,8 @@ export class GraphqlPhotosComponent {
   data: QueryResult;
 
   onMore() {
-    // XXX Temporary fix of `apollostack/angular2-apollo/issues/80`
-    // XXX WE HAVE A BUG HERE!!!!
-    /*
-      this.offset += this.limit;
-      this.data['fetchMore']({
+    this.offset += this.limit;
+    this.data['fetchMore']({
       variables: {
         offset: this.offset,
         limit: this.limit,
@@ -67,9 +64,6 @@ export class GraphqlPhotosComponent {
           feed: [...prev.feed, ...fetchMoreResult.data.feed],
         });
       },
-    });*/
-
-    // XXX Temporary workaround
-    this.limit += 3;
+    });
   }
 }
